@@ -3,6 +3,7 @@ import 'package:client_list_with_bloc/src/blocs/events/client_events.dart';
 import 'package:client_list_with_bloc/src/blocs/states/client_states.dart';
 import 'package:client_list_with_bloc/src/models/client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,14 +21,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _bloc = ClientBloc();
 
-    _bloc.inputClient.add(LoadClientEvent());
+    _bloc.add(LoadClientEvent());
 
     super.initState();
   }
 
   @override
   void dispose() {
-    _bloc.inputClient.close();
+    _bloc.close();
     super.dispose();
   }
 
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
 
                     var client = Client(name: _nameEditingController.text);
 
-                    _bloc.inputClient.add(AddClientEvent(client));
+                    _bloc.add(AddClientEvent(client));
 
                     Navigator.pop(context);
                     _nameEditingController.clear();
@@ -88,11 +89,15 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
-        child: StreamBuilder<ClientState>(
-          stream: _bloc.stream,
-          builder: (_, snapshot) {
-            if (snapshot.data is SuccesClientState) {
-              var clients = snapshot.data!.clients;
+        child: BlocBuilder<ClientBloc, ClientState>(
+          bloc: _bloc,
+          builder: (_, state) {
+            if (state is IdleClientState) {
+              return Center(child: CircularProgressIndicator(color: Colors.amber.shade700));
+            }
+
+            if (state is SuccesClientState) {
+              List<Client> clients = state.clients;
 
               return ListView.separated(
                 itemBuilder: (_, i) => ListTile(
@@ -110,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   title: Text(clients[i].name),
                   trailing: IconButton(
                     icon: const Icon(Icons.person_off_rounded),
-                    onPressed: () => _bloc.inputClient.add(RemoveClientEvent(clients[i])),
+                    onPressed: () => _bloc.add(RemoveClientEvent(clients[i])),
                   ),
                 ),
                 separatorBuilder: (_, __) => const Divider(),
