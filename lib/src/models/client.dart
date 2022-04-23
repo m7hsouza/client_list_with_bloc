@@ -1,6 +1,5 @@
 class Client {
-  const Client({required this.id, required this.name});
+  const Client({required this.name});
 
-  final int id;
   final String name;
 }
