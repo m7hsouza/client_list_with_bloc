@@ -4,23 +4,21 @@ import 'package:client_list_with_bloc/src/repositories/client_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ClientBloc extends Bloc<ClientEvent, ClientState> {
-  ClientBloc() : super(IdleClientState()) {
-    on<LoadClientEvent>(
-      (event, emit) => emit(
-        SuccesClientState(clients: _repository.loadClients()),
-      ),
-    );
+  ClientBloc() : super(const ClientIdleState()) {
+    on<ClientEvent>(
+      (event, emit) async {
+        emit(const ClientLoadState());
 
-    on<RemoveClientEvent>(
-      (event, emit) => emit(
-        SuccesClientState(clients: _repository.removeClient(event.client)),
-      ),
-    );
+        if (event is ClientLoadEvent) {
+          await Future.delayed(const Duration(seconds: 2));
 
-    on<AddClientEvent>(
-      (event, emit) => emit(
-        SuccesClientState(clients: _repository.addClient(event.client)),
-      ),
+          emit(ClientSuccessState(clients: _repository.loadClients()));
+        } else if (event is ClientDeleteEvent) {
+          emit(ClientSuccessState(clients: _repository.removeClient(event.client)));
+        } else if (event is ClientAddEvent) {
+          emit(ClientSuccessState(clients: _repository.addClient(event.client)));
+        }
+      },
     );
   }
 

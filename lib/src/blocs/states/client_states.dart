@@ -1,15 +1,19 @@
 import 'package:client_list_with_bloc/src/models/client.dart';
 
 abstract class ClientState {
-  ClientState({required this.clients});
+  const ClientState({required this.clients});
 
   final List<Client> clients;
 }
 
-class IdleClientState extends ClientState {
-  IdleClientState() : super(clients: []);
+class ClientIdleState extends ClientState {
+  const ClientIdleState() : super(clients: const []);
 }
 
-class SuccesClientState extends ClientState {
-  SuccesClientState({required List<Client> clients}) : super(clients: clients);
+class ClientLoadState extends ClientState {
+  const ClientLoadState() : super(clients: const []);
+}
+
+class ClientSuccessState extends ClientState {
+  const ClientSuccessState({required List<Client> clients}) : super(clients: clients);
 }

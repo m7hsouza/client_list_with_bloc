@@ -5,10 +5,7 @@ class ClientRepository {
 
   List<Client> loadClients() {
     _clients.addAll([
-      const Client(name: 'Anny Beatriz'),
-      const Client(name: 'Talita Raquel'),
-      const Client(name: 'Carla Evellyn'),
-      const Client(name: 'Fernanda Indres'),
+      const Client(name: 'Matheus Lucas'),
     ]);
 
     return _clients;

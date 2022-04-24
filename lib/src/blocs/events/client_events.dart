@@ -2,16 +2,16 @@ import 'package:client_list_with_bloc/src/models/client.dart';
 
 abstract class ClientEvent {}
 
-class LoadClientEvent extends ClientEvent {}
+class ClientLoadEvent extends ClientEvent {}
 
-class AddClientEvent extends ClientEvent {
-  AddClientEvent(this.client);
+class ClientAddEvent extends ClientEvent {
+  ClientAddEvent(this.client);
 
   final Client client;
 }
 
-class RemoveClientEvent extends ClientEvent {
-  RemoveClientEvent(this.client);
+class ClientDeleteEvent extends ClientEvent {
+  ClientDeleteEvent(this.client);
 
   final Client client;
 }
